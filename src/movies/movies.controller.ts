@@ -8,16 +8,19 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { MoviesService } from './movies.service';
+import { Movie } from './entities/movie.entity';
 
 @Controller('movies')
 export class MoviesController {
+  constructor(private readonly moviesService: MoviesService) {}
   /*
     주의 : GET 처리를 할 때 라우트 파라미터 (:id)와 같은 것을 매핑한 함수가
     상단에 있을 시 나머지 GET 처리는 동작하지 않는다.
   */
   @Get()
-  getAll() {
-    return '모든 영화를 반환합니다.';
+  getAll(): Movie[] {
+    return this.moviesService.getAll();
   }
 
   // @Query()에 포함되는 파라미터는 쿼리스트링 변수를 의미
@@ -27,18 +30,18 @@ export class MoviesController {
   }
 
   @Get('/:id')
-  getOne(@Param('id') movieId: string) {
-    return `아이디가 ${movieId}인 영화를 불러왔습니다.`;
+  getOne(@Param('id') movieId: string): Movie {
+    return this.moviesService.getOne(movieId);
   }
 
   @Post()
   create(@Body() movieData) {
-    return movieData;
+    return this.moviesService.create(movieData);
   }
 
   @Delete('/:id')
   remove(@Param('id') moveId: string) {
-    return `아이다가 ${moveId}인 영화를 삭제하였습니다.`;
+    return this.moviesService.deleteOne(moveId);
   }
 
   @Patch('/:id')
