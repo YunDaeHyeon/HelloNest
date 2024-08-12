@@ -46,11 +46,7 @@ export class MoviesController {
 
   @Patch('/:id')
   path(@Param('id') moveId: string, @Body() updateData) {
-    // 업데이트할 영화의 id와 클라이언트로 넘어온 오브젝트 반환
-    return {
-      updateMovie: moveId,
-      ...updateData,
-    };
+    return this.moviesService.update(moveId, updateData);
   }
 }
 
