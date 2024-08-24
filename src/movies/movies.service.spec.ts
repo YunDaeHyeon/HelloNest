@@ -83,4 +83,24 @@ describe('MoviesService', () => {
       expect(afterCreate).toBeGreaterThan(beforeCreate);
     });
   });
+
+  describe('update', () => {
+    it('영화가 정상적으로 수정되는가?', () => {
+      service.create({
+        title: 'Test Movie',
+        genres: ['test'],
+        year: 2000,
+      });
+      service.update(1, { title: 'Update Test' });
+      const movie = service.getOne(1);
+      expect(movie.title).toEqual('Update Test');
+    });
+    it('NotFoundException을 출력하는가?', () => {
+      try {
+        service.update(999, {});
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
+  });
 });
